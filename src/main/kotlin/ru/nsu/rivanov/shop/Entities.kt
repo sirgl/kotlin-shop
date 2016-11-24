@@ -4,14 +4,14 @@ import java.math.BigDecimal
 import javax.persistence.*
 
 @Entity data class Category(
-        @Id var id: Int? = null,
+        @Id @GeneratedValue(strategy = GenerationType.AUTO) var id: Int? = null,
         @OneToOne var parentCategory: Category? = null,
         @Column var name: String = "",
         @Column var description: String = ""
 )
 
 @Entity data class Product(
-        @Id var id: Int? = null,
+        @Id @GeneratedValue(strategy = GenerationType.AUTO) var id: Int? = null,
         @Column var name: String,
         @Column var price: BigDecimal,
         @Column var description: String,
@@ -22,8 +22,8 @@ import javax.persistence.*
 )
 
 @Entity data class Order(
-        @Id var id: String,
-        @OneToMany var items: MutableList<OrderItem>,
+        @Id @GeneratedValue(strategy = GenerationType.AUTO) var id: String,
+        @OneToMany(cascade = arrayOf(CascadeType.ALL)) var items: MutableList<OrderItem>,
         @Column var shippingAdress: String,
         @Enumerated(EnumType.STRING) var paymentMethod: PaymentMethod,
         @Enumerated(EnumType.STRING) var shippingMethod: ShippingMethod
@@ -44,13 +44,13 @@ enum class PaymentMethod {
 }
 
 @Entity data class OrderItem(
-        @Id var id: Long? = null,
+        @Id @GeneratedValue(strategy = GenerationType.AUTO) var id: Int? = null,
         @OneToOne var product: Product,
         @Column var count: Int
 )
 
 @Entity data class UserProfile (
-        @Id var id: Long? = null,
+        @Id @GeneratedValue(strategy = GenerationType.AUTO) var id: Long? = null,
         @OneToMany var orders: MutableList<Order>,
         @Column var name: String,
         @Column var phone: String,
