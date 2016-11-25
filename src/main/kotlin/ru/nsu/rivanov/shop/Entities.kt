@@ -49,7 +49,7 @@ enum class PaymentMethod {
         @Column var count: Int
 )
 
-@Entity data class UserProfile (
+@Entity data class UserProfile(
         @Id @GeneratedValue(strategy = GenerationType.AUTO) var id: Long? = null,
         @OneToMany var orders: MutableList<Order>,
         @Column var name: String,
