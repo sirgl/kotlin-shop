@@ -1,6 +1,7 @@
 package ru.nsu.rivanov.shop
 
 import java.math.BigDecimal
+import java.util.*
 import javax.persistence.*
 
 @Entity data class Category(
@@ -8,26 +9,34 @@ import javax.persistence.*
         @OneToOne var parentCategory: Category? = null,
         @Column var name: String = "",
         @Column var description: String = ""
-)
+) {
+    constructor() : this(null, null, "", "")
+}
 
 @Entity data class Product(
-        @Id @GeneratedValue(strategy = GenerationType.AUTO) var id: Int? = null,
+        @Id @GeneratedValue(strategy = GenerationType.AUTO) var id: Int?,
         @Column var name: String,
-        @Column var price: BigDecimal,
+        @Column var price: Float,
         @Column var description: String,
         @Column var count: Int,
-        @OneToOne var category: Category,
+        @OneToOne var category: Category?,
         @Column var imageUrl: String?,
         @ElementCollection var attributes: MutableList<String>
-)
+) {
+    constructor() : this(null, "", 0f, "", 0, null, null, mutableListOf())
+}
 
+@Table(name = "orders")
 @Entity data class Order(
-        @Id @GeneratedValue(strategy = GenerationType.AUTO) var id: String,
+        @Id @GeneratedValue(strategy = GenerationType.AUTO) var id: String?,
         @OneToMany(cascade = arrayOf(CascadeType.ALL)) var items: MutableList<OrderItem>,
         @Column var shippingAdress: String,
+        @Column var orderDate: Date,
         @Enumerated(EnumType.STRING) var paymentMethod: PaymentMethod,
         @Enumerated(EnumType.STRING) var shippingMethod: ShippingMethod
-)
+) {
+    constructor() : this(null, mutableListOf(), "", Date(), PaymentMethod.DEBIT_CARD, ShippingMethod.PICKUP)
+}
 
 enum class ShippingMethod {
     PICKUP,
@@ -45,9 +54,11 @@ enum class PaymentMethod {
 
 @Entity data class OrderItem(
         @Id @GeneratedValue(strategy = GenerationType.AUTO) var id: Int? = null,
-        @OneToOne var product: Product,
+        @OneToOne var product: Product?,
         @Column var count: Int
-)
+) {
+    constructor() : this(null, null, 0)
+}
 
 @Entity data class UserProfile(
         @Id @GeneratedValue(strategy = GenerationType.AUTO) var id: Long? = null,
@@ -55,4 +66,6 @@ enum class PaymentMethod {
         @Column var name: String,
         @Column var phone: String,
         @Column var mail: String
-)
+) {
+    constructor() : this(null, mutableListOf(), "", "", "")
+}
