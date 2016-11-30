@@ -16,14 +16,15 @@ import javax.persistence.*
 @Entity data class Product(
         @Id @GeneratedValue(strategy = GenerationType.AUTO) var id: Int?,
         @Column var name: String,
-        @Column var price: Float,
+        @Column var price: Int,
         @Column var description: String,
         @Column var count: Int,
         @OneToOne var category: Category?,
         @Column var imageUrl: String?,
         @ElementCollection var attributes: MutableList<String>
 ) {
-    constructor() : this(null, "", 0f, "", 0, null, null, mutableListOf())
+    constructor() : this(null, "", 0, "", 0, null, null, mutableListOf())
+    constructor(name: String, price: Int) : this(null, name, price, "", 0, null, null, mutableListOf())
 }
 
 @Table(name = "orders")
@@ -36,6 +37,7 @@ import javax.persistence.*
         @Enumerated(EnumType.STRING) var shippingMethod: ShippingMethod
 ) {
     constructor() : this(null, mutableListOf(), "", Date(), PaymentMethod.DEBIT_CARD, ShippingMethod.PICKUP)
+    constructor(items: MutableList<OrderItem>) : this(null, items, "", Date(), PaymentMethod.CASH, ShippingMethod.DHL)
 }
 
 enum class ShippingMethod {

@@ -21,23 +21,28 @@ class ReportController {
 open class ReportBuilder {
     @Autowired lateinit var orderRepository: OrderRepository
 
+    constructor(orderRepository: OrderRepository) {
+        this.orderRepository = orderRepository
+    }
+
+
     fun createReport(startingDate: Date, endingDate: Date): IntervalResponse {
         val orders = orderRepository.findByOrderDateBetween(startingDate, endingDate)
         val totalCash = orders.flatMap { it.items }
                 .map { it.product?.price?.times(it.count) }
-                .reduce { c1, c2 -> c1?.plus(c2 ?: 0f) }
+                .reduce { c1, c2 -> c1?.plus(c2 ?: 0) }
         val categoryToCount = orders.flatMap { it.items }
                 .groupBy { it.product?.category }
                 .map { Pair(it.key?.name?:"", it.value.map { it.count }.reduce { a, b -> a + b }) }
                 .toMap()
         val totalCount = categoryToCount.values.reduce { a, b -> a + b }
-        return IntervalResponse(orders, totalCash?:0f, totalCount, categoryToCount)
+        return IntervalResponse(orders, totalCash?:0, totalCount, categoryToCount)
     }
 }
 
 data class IntervalResponse(
         var orders: List<Order>,
-        var totalRevenues: Float,
+        var totalRevenues: Int,
         var soldTotally: Int,
         var soldByCategories: Map<String, Int>
 )
