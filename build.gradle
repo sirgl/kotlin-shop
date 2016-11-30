@@ -1,18 +1,28 @@
-group 'ru.nsu.rivanov'
-version '1.0-SNAPSHOT'
 
 buildscript {
     ext.kotlin_version = '1.0.5'
 
     repositories {
         mavenCentral()
+        jcenter()
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
 
+plugins {
+    id 'nebula.lint' version '6.0.0'
+    id 'nebula.release' version '4.1.0'
+}
+
 apply plugin: 'kotlin'
+
+gradleLint.rules = ['all-dependency']
+
+group 'ru.nsu.rivanov'
+version '1.0-SNAPSHOT'
+
 
 repositories {
     mavenCentral()
@@ -36,4 +46,5 @@ dependencies {
     compile group: 'com.h2database', name: 'h2', version: '1.4.193'
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: '1.4.2.RELEASE'
     compile 'com.vaadin.addon:jpacontainer:3.2.0'
+
 }

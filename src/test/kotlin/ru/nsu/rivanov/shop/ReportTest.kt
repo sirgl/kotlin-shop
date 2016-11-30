@@ -7,9 +7,6 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import java.util.*
 
-/**
- * Created by roman on 29.11.16.
- */
 class ReportTest {
     @Test fun totalCountSummarized() {
         val reportBuilder = ReportBuilder(mock<OrderRepository> {
