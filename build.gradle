@@ -15,8 +15,6 @@ apply plugin: "jacoco"
 apply plugin: 'org.jetbrains.dokka'
 apply plugin: 'kotlin'
 
-gradleLint.rules = ['all-dependency']
-
 group 'ru.nsu.rivanov'
 version '1.0-SNAPSHOT'
 
