@@ -7,16 +7,25 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import java.util.*
 
+/**
+ * Rest controller to get report
+ */
 @RestController
 class ReportController {
     @Autowired lateinit var reportBuilder: ReportBuilder
 
+    /**
+     * GET method to get report
+     */
     @GetMapping("report")
     public fun createReport(@RequestParam startingDate: Date, @RequestParam endingDate: Date): IntervalResponse {
         return reportBuilder.createReport(startingDate, endingDate)
     }
 }
 
+/**
+ * Builder that analyzes data from repository and assemblies report
+ */
 @Component
 open class ReportBuilder {
     @Autowired lateinit var orderRepository: OrderRepository

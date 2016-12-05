@@ -9,5 +9,8 @@ interface CategoryRepository : JpaRepository<Category, Int>
 interface OrderItemRepository : JpaRepository<OrderItem, Int>
 interface UserProfileRepository : JpaRepository<UserProfile, Int>
 interface OrderRepository : JpaRepository<Order, Int> {
+    /**
+     * Method finds all orders made between 2 dates
+     */
     fun findByOrderDateBetween(startingDate: Date, endingDate: Date) : List<Order>
 }
