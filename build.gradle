@@ -15,6 +15,7 @@ plugins {
     id 'nebula.lint' version '6.0.0'
 }
 
+apply plugin: "jacoco"
 apply plugin: 'org.jetbrains.dokka'
 apply plugin: 'kotlin'
 
@@ -23,6 +24,9 @@ gradleLint.rules = ['all-dependency']
 group 'ru.nsu.rivanov'
 version '1.0-SNAPSHOT'
 
+configurations {
+    detekt
+}
 
 repositories {
     mavenCentral()
@@ -30,11 +34,37 @@ repositories {
     maven {
         url "http://maven.vaadin.com/vaadin-addons"
     }
+    maven {
+        url  "http://dl.bintray.com/arturbosch/code-analysis"
+    }
 }
+
+task detekt(type: JavaExec) {
+    main = "io.gitlab.arturbosch.detekt.cli.Main"
+    classpath = configurations.detekt
+    def input = "$project.projectDir.absolutePath"
+    def filters = ".*test.*"
+    def rulesets = ""
+    def params = [ '-p', input, '-f', filters, '-r', rulesets]
+    args(params)
+}
+
+jacoco {
+    toolVersion = "0.7.6.201602180812"
+    reportsDir = file("$buildDir/reports/jacoco")
+}
+
+jacocoTestReport {
+    reports {
+        html.destination "${buildDir}/jacocoHtml"
+    }
+}
+
+jacocoTestReport.dependsOn(test)
 
 dependencies {
     compile 'org.springframework.boot:spring-boot-autoconfigure:1.4.2.RELEASE'
-    compile 'org.jetbrains.kotlin:kotlin-stdlib:1.0.5'
+    compile 'org.jetbrains.kotlin:kotlin-stdlib:1.0.5-2'
     compile 'org.springframework.data:spring-data-commons:1.12.5.RELEASE'
     compile 'org.springframework:spring-web:4.3.4.RELEASE'
     compile 'org.springframework.data:spring-data-jpa:1.10.5.RELEASE'
@@ -57,5 +87,5 @@ dependencies {
     compile 'com.fasterxml.jackson.module:jackson-module-kotlin:2.8.4'
     compile group: 'com.h2database', name: 'h2', version: '1.4.193'
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: '1.4.2.RELEASE'
-
+    detekt 'io.gitlab.arturbosch.detekt:detekt-cli:1.0.0.M4'
 }
