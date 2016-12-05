@@ -11,10 +11,6 @@ buildscript {
     }
 }
 
-plugins {
-    id 'nebula.lint' version '6.0.0'
-}
-
 apply plugin: "jacoco"
 apply plugin: 'org.jetbrains.dokka'
 apply plugin: 'kotlin'
