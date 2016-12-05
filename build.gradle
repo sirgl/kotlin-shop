@@ -54,6 +54,10 @@ jacocoTestReport {
     }
 }
 
+dokka {
+    outputFormat = 'javadoc'
+}
+
 jacocoTestReport.dependsOn(test)
 
 dependencies {
