@@ -11,6 +11,8 @@ import javax.persistence.*
         @Column var description: String = ""
 ) {
     constructor() : this(null, null, "", "")
+
+    override fun toString() = name
 }
 
 @Entity data class Product(
